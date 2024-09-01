@@ -20,6 +20,6 @@ const chatSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-const chatModel = mongoose.model('ChatModel', chatSchema);
+const chatModel = mongoose.model('chats', chatSchema);
 
 export default chatModel;

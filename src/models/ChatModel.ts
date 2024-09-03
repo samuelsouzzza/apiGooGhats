@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import mongoose from 'mongoose';
 
 const messageSchema = new mongoose.Schema({
@@ -17,7 +18,10 @@ const chatSchema = new mongoose.Schema({
   ],
   messages: [messageSchema],
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
+  updatedAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const chatModel = mongoose.model('chats', chatSchema);

@@ -12,6 +12,7 @@ export const getUsers = async (req: Request, res: Response) => {
     try {
       const usersFinded = await UserModel.find({
         email: { $regex: email, $options: 'i' },
+        _id: { $ne: objId },
       });
 
       return res.json(usersFinded);

@@ -1,4 +1,3 @@
-import moment from 'moment-timezone';
 import mongoose from 'mongoose';
 
 const messageSchema = new mongoose.Schema({

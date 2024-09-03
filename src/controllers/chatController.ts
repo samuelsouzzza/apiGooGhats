@@ -11,7 +11,7 @@ export const getChats = async (req: Request, res: Response) => {
       async function getChatsWithParticipants() {
         const chats = await chatModel
           .find({ participants: { $in: [myObjId] } })
-          .populate('participants', 'name profilePic _id');
+          .populate('participants', 'name profilePic online _id');
         return chats;
       }
 
@@ -25,8 +25,10 @@ export const getChats = async (req: Request, res: Response) => {
 
       async function getChatsWithParticipants() {
         const chat = await chatModel
-          .findOne({ participants: { $all: [myObjId, yourObjId] } })
-          .populate('participants', 'name profilePic _id');
+          .findOne({
+            participants: { $all: [myObjId, yourObjId] },
+          })
+          .populate('participants', 'name profilePic online updatedAt _id');
         return chat;
       }
 
@@ -70,7 +72,14 @@ export const sendMessage = async (req: Request, res: Response) => {
       if (chat) {
         await chatModel.updateOne(
           { _id: chat._id },
-          { $push: { messages: { senderId: myObj, text: text } } }
+          {
+            $push: {
+              messages: { senderId: myObj, text: text },
+            },
+            $currentDate: {
+              updatedAt: Date.now(),
+            },
+          }
         );
       }
 

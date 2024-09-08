@@ -19,10 +19,9 @@ const chatSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: {
     type: Date,
-    default: Date.now(),
   },
 });
 
-const chatModel = mongoose.model('chats', chatSchema);
+const ChatModel = mongoose.model('chats', chatSchema);
 
-export default chatModel;
+export default ChatModel;

@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import chatModel from '../models/ChatModel';
+import ChatModel from '../models/ChatModel';
 import { ObjectId } from 'mongodb';
 
 export const getChats = async (req: Request, res: Response) => {
@@ -9,26 +9,27 @@ export const getChats = async (req: Request, res: Response) => {
   try {
     if (!yourId) {
       async function getChatsWithParticipants() {
-        const chats = await chatModel
-          .find({ participants: { $in: [myObjId] } })
-          .populate('participants', 'name profilePic online _id');
+        const chats = await ChatModel.find({
+          participants: { $in: [myObjId] },
+        }).populate('participants', 'name profilePic online lastAcess _id');
         return chats;
       }
 
       return res.json(await getChatsWithParticipants());
     } else {
       if (!ObjectId.isValid(yourId)) {
-        return res.status(400).json({ error: 'ID de usuário inválido.' });
+        return res.status(400).json({});
       }
 
       const yourObjId = new ObjectId(yourId);
 
       async function getChatsWithParticipants() {
-        const chat = await chatModel
-          .findOne({
-            participants: { $all: [myObjId, yourObjId] },
-          })
-          .populate('participants', 'name profilePic online updatedAt _id');
+        const chat = await ChatModel.findOne({
+          participants: { $all: [myObjId, yourObjId] },
+        }).populate({
+          path: 'participants',
+          select: 'name profilePic online lastAcess _id',
+        });
         return chat;
       }
 
@@ -48,7 +49,9 @@ export const createChat = async (req: Request, res: Response) => {
     const yourObj = new ObjectId(yourId);
 
     try {
-      await chatModel.create({ participants: [myObj, yourObj] });
+      await ChatModel.create({
+        participants: [myObj, yourObj],
+      });
 
       return res.json({ message: 'Conversa criada com sucesso!' });
     } catch (err) {
@@ -67,10 +70,12 @@ export const sendMessage = async (req: Request, res: Response) => {
     const yourObj = new ObjectId(yourId);
 
     try {
-      const chat = await chatModel.findOne({ participants: [myObj, yourObj] });
+      const chat = await ChatModel.findOne({
+        participants: { $all: [myObj, yourObj] },
+      });
 
       if (chat) {
-        await chatModel.updateOne(
+        await ChatModel.updateOne(
           { _id: chat._id },
           {
             $push: {

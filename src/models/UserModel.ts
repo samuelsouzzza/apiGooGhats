@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     profilePic: { type: String, required: true },
-    online: { type: Boolean, default: false },
+    online: { type: Boolean, default: true },
     lastAcess: { type: Date, default: Date.now() },
   },
   { collection: 'users' }

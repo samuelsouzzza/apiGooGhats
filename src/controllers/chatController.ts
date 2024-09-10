@@ -97,3 +97,24 @@ export const sendMessage = async (req: Request, res: Response) => {
     return;
   }
 };
+
+export const deleteChat = async (req: Request, res: Response) => {
+  const { idChat, idMessage } = req.params;
+  const objIdChat = new ObjectId(idChat);
+
+  try {
+    if (idMessage) {
+      const objIdMessage = new ObjectId(idMessage);
+
+      await ChatModel.updateOne(
+        { _id: objIdChat },
+        { $pull: { messages: { _id: objIdMessage } } }
+      );
+    } else {
+      await ChatModel.deleteOne({ _id: objIdChat });
+    }
+  } catch (err) {
+    if (err instanceof Error)
+      console.log('Não foi apagar a conversa/mensagem.', err.message);
+  }
+};

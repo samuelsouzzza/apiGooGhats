@@ -8,7 +8,6 @@ const messageSchema = new mongoose.Schema({
   },
   text: { type: String, required: true },
   sentAt: { type: Date, default: Date.now },
-  readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserModel' }],
 });
 
 const chatSchema = new mongoose.Schema({

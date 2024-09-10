@@ -9,4 +9,4 @@ export const userRouter = Router();
 
 userRouter.get('/users/:id/:email?', getUsers);
 userRouter.post('/auth', authUser);
-userRouter.post('/updateUser/:id', updateStatusUser);
+userRouter.put('/updateUser/:id', updateStatusUser);

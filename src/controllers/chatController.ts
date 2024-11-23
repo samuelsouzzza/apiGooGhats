@@ -71,7 +71,7 @@ export const sendMessage = async (req: Request, res: Response) => {
 
     try {
       const chat = await ChatModel.findOne({
-        participants: { $all: [myObj, yourObj] },
+        participants: { $size: 2, $all: [myObj, yourObj] },
       });
 
       if (chat) {
@@ -82,7 +82,7 @@ export const sendMessage = async (req: Request, res: Response) => {
               messages: { senderId: myObj, text: text },
             },
             $currentDate: {
-              updatedAt: Date.now(),
+              updatedAt: true,
             },
           }
         );
